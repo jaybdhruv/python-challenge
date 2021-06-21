@@ -1,19 +1,18 @@
 #import dependencies
 import os
 import csv
+#from collections import Counter
 
 #select a path for a file in Resources folder
-election_csv = os.path.join('Resources','election_data.csv')
+election_csv = os.path.join("Resources","election_data.csv")
 
 total_votes = 0
+#candidate = []
 
-abc = []
-
-votes_khan = 0
-votes_correy = 0
-votes_li = 0
-votes_otooley = 0
-
+khan = 0
+correy = 0
+li = 0
+otooley = 0
 percent_khan = 0
 percent_correy = 0
 percent_li = 0
@@ -26,28 +25,51 @@ with open(election_csv) as election_file:
 
     for row in csvreader:
 
-        abc = row[0] 
         total_votes += 1
+        
+        #candidate.append(row[2])
+
+        #c = Counter(candidate)
 
         if row[2] == "Khan":
-            votes_khan += 1
+            khan += 1
         elif row[2] == "Correy":
-            votes_correy += 1
+            correy += 1
         elif row[2] == "Li":
-            votes_li += 1
+            li+= 1
         elif row[2] == "O'Tooley":
-            votes_otooley += 1
-        
-    percent_khan = round(((votes_khan/total_votes)*100),2) 
-    percent_correy = round(((votes_correy/total_votes)*100),2)
-    percent_li = (votes_li/total_votes)*100
-    percent_otooley = (votes_otooley/total_votes)*100
+            otooley += 1
 
-print(abc.count())
+percent_khan = round(((khan/total_votes)*100),2)
+percent_correy = round(((correy/total_votes)*100),2)
+percent_li = round(((li/total_votes)*100),2)
+percent_otooley = round(((otooley/total_votes)*100),2)
 
-'''print(f"Khan: {votes_khan} % {percent_khan}")
-print(f"Correy: {votes_correy} % {percent_correy}")
-print(f"Li: {votes_li} % {percent_li}")
-print(f"O'Tooley: {votes_otooley} % {percent_otooley}")
+candidate = {khan:"Khan",correy:"Correy",li:"Li",otooley:"O'Tooley"}
 
-print(total_votes)'''
+#candidate1 = {"Khan":khan,"Correy":correy,"Li":li,"O'Tooley":otooley}
+
+#print(candidate)
+
+#win = max(candidate)
+
+winner = candidate.get(max(candidate))
+
+election_result = (f"Election Results\n"
+                    "----------------------\n"
+                    f"Total Votes: {total_votes}\n"
+                    "----------------------\n"
+                    f"Khan: {percent_khan:.3f}% ({khan})\n"
+                    f"Correy: {percent_correy:.3f}% ({correy})\n"
+                    f"Li: {percent_li:.3f}% ({li})\n"
+                    f"O'Tooley: {percent_otooley:.3f}% ({otooley})\n"
+                    "----------------------\n"
+                    f"Winner: {winner}\n"
+                    "----------------------")
+
+print(election_result)
+
+output_path = os.path.join("Analysis","PyPoll_Analysis.txt")
+
+with open(output_path, "w") as txtfile:
+    txtfile.write(election_result)
