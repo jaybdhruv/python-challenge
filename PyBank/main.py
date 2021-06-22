@@ -8,6 +8,7 @@ budget_csv = os.path.join('Resources','budget_data.csv')
 total_months = 0
 total_amount = 0
 change = []
+month = []
 
 with open(budget_csv) as budget_file:
     csvreader = csv.reader(budget_file, delimiter = ',')
@@ -21,7 +22,7 @@ with open(budget_csv) as budget_file:
         total_amount += int(row[1])
 
         
-
+        
         #for i in range(0,len(row[1])):
          #   change.append
           #  break

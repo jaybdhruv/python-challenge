@@ -2,10 +2,10 @@
 import os
 import csv
 
-#select a path for a CSV file in Resources folder to read
+#select a path for CSV file to read from Resources folder
 election_csv = os.path.join("Resources","election_data.csv")
 
-#Declaring variables
+#declare variables, dictionary and list
 total_votes = 0
 
 khan = 0
@@ -13,59 +13,63 @@ correy = 0
 li = 0
 otooley = 0
 
-percent_khan = 0
-percent_correy = 0
-percent_li = 0
-percent_otooley = 0
+candidate_votes = {}
+percent = []
 
-#Reading CSV file
+#read CSV file
 with open(election_csv) as election_file:
     csvreader = csv.reader(election_file, delimiter = ',')
 
-    #skipping header row
+    #skip header row
     header = next(csvreader)
 
-    #Looping through rows of CSV file
+    #loop through rows of CSV file
     for row in csvreader:
 
-        #Calculating total votes 
+        #calculate total votes by incrementing variable by 1 for each row 
         total_votes += 1
         
-        #If loop to calculate total votes for each candidates
-        #increment candidate variable if it is equal to row value
-        if row[2] == "Khan":
-            khan += 1
-        elif row[2] == "Correy":
-            correy += 1
-        elif row[2] == "Li":
-            li+= 1
-        elif row[2] == "O'Tooley":
-            otooley += 1
+        #variable that will store candidate name for each iteration
+        candidate = row[2]
 
-    #Calculating percentage votes for each candidate
-    #Formatting number into percentage
-    percent_khan = "{:.3%}".format(khan/total_votes)
-    percent_correy = "{:.3%}".format(correy/total_votes)
-    percent_li = "{:.3%}".format(li/total_votes)
-    percent_otooley = "{:.3%}".format(otooley/total_votes)
+        #use if loop to check if candidate name exists in candidate_votes dictionary
+        #if it exist then increase count of votes for that candidate
+        #candidate name and counter of votes acts as a key-value pair in this dictionary
+        #initialize candidate counter if no value found in the dictionary
+        if candidate in candidate_votes.keys():
+            candidate_votes[candidate] += 1
+        else:
+            candidate_votes[candidate] = 1
 
-    #Dictionary to define key-value pair of total votes for each candidate with their name
-    candidate = {khan:"Khan",correy:"Correy",li:"Li",otooley:"O'Tooley"}
-    
-    #using max() function to find the highest value of key in the dictionary
-    #using get() function to get value for the highest key in a variable
-    #this will determine our winner
-    winner = candidate.get(max(candidate))
+#use for loop to search for candidate name in the key of the dictionary
+#if it matches then calculate total number of votes and their percent win for each candidate
+#use format percentage method to convert number into percentage with 3 decimal places and storing it in percent list
+for candidate in candidate_votes.keys():
+    if candidate == "Khan":
+        khan = candidate_votes.get(candidate)
+        percent.append("{:.3%}".format(khan/total_votes))
+    elif candidate == "Correy":
+        correy = candidate_votes.get(candidate)
+        percent.append("{:.3%}".format(correy/total_votes))
+    elif candidate == "Li":
+        li = candidate_votes.get(candidate)
+        percent.append("{:.3%}".format(li/total_votes))
+    elif candidate == "O'Tooley":
+        otooley = candidate_votes.get(candidate)
+        percent.append("{:.3%}".format(otooley/total_votes))
 
-#Entering print statements into a variable 
+#using max() and .get to find the key with highest value in dictionary
+winner = max(candidate_votes, key=candidate_votes.get)
+
+#enter print statements into a variable 
 election_result = ("Election Results\n"
                     "----------------------\n"
-                    "Total Votes: {total_votes}\n"
+                    f"Total Votes: {total_votes}\n"
                     "----------------------\n"
-                    f"Khan: {percent_khan} ({khan})\n"
-                    f"Correy: {percent_correy} ({correy})\n"
-                    f"Li: {percent_li} ({li})\n"
-                    f"O'Tooley: {percent_otooley} ({otooley})\n"
+                    f"Khan: {percent[0]} ({khan})\n"
+                    f"Correy: {percent[1]} ({correy})\n"
+                    f"Li: {percent[2]} ({li})\n"
+                    f"O'Tooley: {percent[3]} ({otooley})\n"
                     "----------------------\n"
                     f"Winner: {winner}\n"
                     "----------------------")
@@ -73,9 +77,9 @@ election_result = ("Election Results\n"
 #printing result on terminal
 print(election_result)
 
-#select a path to store output in an Analysis folder
+#select a path to store result in an Analysis folder as a text file
 output_path = os.path.join("Analysis","PyPoll_Analysis.txt")
 
-#Writing output in a Text file
+#write output in a text file
 with open(output_path, "w") as txtfile:
     txtfile.write(election_result)
