@@ -3,7 +3,7 @@ import os
 import csv
 
 #select a path for a file in Resources folder
-budget_csv = os.path.join('Resources','budget_data.csv')
+budget_csv = os.path.join("Resources","budget_data.csv")
 
 total_months = 0
 total_amount = 0
@@ -49,3 +49,8 @@ financial_analysis = ("Financial Analysis\n"
                         f"Greatest Decrease in Profits: {greatest_decrease_month} (${greatest_decrease})")
 
 print(financial_analysis)
+
+output_path = os.path.join("Analysis","PyBank Financial Analysis.txt")
+
+with open(output_path, "w") as txtfile:
+    txtfile.write(financial_analysis)
