@@ -8,7 +8,7 @@ budget_csv = os.path.join('Resources','budget_data.csv')
 total_months = 0
 total_amount = 0
 change = []
-months = []
+change_months = []
 
 with open(budget_csv) as budget_file:
     csvreader = csv.reader(budget_file, delimiter = ',')
@@ -28,24 +28,24 @@ with open(budget_csv) as budget_file:
         total_amount += int(row[1])
 
         change.append(int(row[1])-previous_amount)
-        months.append(row[0])
+        change_months.append(row[0])
 
         previous_amount = int(row[1])
 
-average = round(sum(change)/len(change),2)
+average_change = round(sum(change)/len(change),2)
 
 greatest_increase = max(change)
 greatest_decrease = min(change)
 
-index_max = change.index(max(change))
+greatest_increase_month = change_months[change.index(greatest_increase)]
+greatest_decrease_month = change_months[change.index(greatest_decrease)]
 
-print(index_max)
+financial_analysis = ("Financial Analysis\n"
+                        "--------------------------\n"
+                        f"Total Months: {total_months}\n"
+                        f"Total: ${total_amount}\n"
+                        f"Average Change: ${average_change}\n"
+                        f"Greatest Increase in Profits: {greatest_increase_month} (${greatest_increase})\n"
+                        f"Greatest Decrease in Profits: {greatest_decrease_month} (${greatest_decrease})")
 
-
-
-
-print(greatest_decrease)
-print(greatest_increase)
-print("${:,.2f}".format(average))       
-print(total_amount)
-print(total_months)
+print(financial_analysis)
